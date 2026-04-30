@@ -13,8 +13,8 @@ if not cap.isOpened():
     raise RuntimeError(f"Não foi possível abrir a câmera (índice {CAMERA_INDEX}). "
                        f"Tente mudar CAMERA_INDEX para 1 ou 2.")
 
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
 print("Câmera iniciada. Pressione 'Q' para sair.")
 
@@ -33,6 +33,7 @@ try:
         cv2.putText(annotated, f"Objetos: {n_boxes}",
                     (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, cor, 2)
 
+        annotated = cv2.resize(annotated, (1280, 720))
         cv2.imshow("Camera IA - YOLOv8", annotated)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
