@@ -6,6 +6,18 @@ MODEL_PATH = 'yolov8n.pt'
 # Índice da câmera: 0 = câmera padrão, 1 = segunda câmera (USB), 2, 3...
 CAMERA_INDEX = 0
 
+# Classes do COCO a detectar (pessoa + material escolar)
+CLASSES = [
+    0,   # person
+    24,  # backpack (mochila)
+    63,  # laptop
+    64,  # mouse
+    66,  # keyboard (teclado)
+    67,  # cell phone (celular)
+    73,  # book (livro/caderno)
+    76,  # scissors (tesoura)
+]
+
 model = YOLO(MODEL_PATH)
 
 cap = cv2.VideoCapture(CAMERA_INDEX)
@@ -13,8 +25,8 @@ if not cap.isOpened():
     raise RuntimeError(f"Não foi possível abrir a câmera (índice {CAMERA_INDEX}). "
                        f"Tente mudar CAMERA_INDEX para 1 ou 2.")
 
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
 
 print("Câmera iniciada. Pressione 'Q' para sair.")
 
@@ -25,7 +37,7 @@ try:
             print("Falha ao capturar frame.")
             break
 
-        results = model.predict(frame, conf=0.25, iou=0.45, verbose=False)
+        results = model.predict(frame, conf=0.25, iou=0.45, classes=CLASSES, verbose=False)
         annotated = results[0].plot()
 
         n_boxes = len(results[0].boxes)
